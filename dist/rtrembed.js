@@ -43,7 +43,7 @@ function rtrTogglePane() {
                 method: "POST",
             },
         ).then(function(response) {
-            console.log('rtr.pageviews++');
+            console.log('rtr.pageviews++ logged');
         });
     }
 }
