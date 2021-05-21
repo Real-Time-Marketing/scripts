@@ -1,3 +1,4 @@
+//RTM-RTR script version 1.0.1
 var globalbID_;
 var RTRLIB = RTRLIB || (function(){
     var _args = {}; // private
