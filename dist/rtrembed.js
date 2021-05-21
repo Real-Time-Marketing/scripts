@@ -39,7 +39,7 @@ function rtrTogglePane() {
     const visible = element.classList.contains("visible");
  
     if(visible == true){
-        document.getElementById("iframe_review_list").contentWindow.reviews();
+        //document.getElementById("iframe_review_list").contentWindow.reviews();
         fetch('https://dashboard.realtimemarketing.com/p/rtr/actions?action=increment-page-views&bID='+globalbID_,
             {
                 method: "POST",
