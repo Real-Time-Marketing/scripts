@@ -28,8 +28,8 @@ var RTCLIB = RTCLIB || (function(){
     };
 }());
 (function() {
-    setTimeout(function(){
-        document.getElementById("bubble-message").classList.toggle("visible");
+     setTimeout(function(){
+        if(document.getElementById("bubble-message")) document.getElementById("bubble-message").classList.toggle("visible");
     }, 3000);
 })();
 
@@ -38,7 +38,7 @@ function  rtcTogglePane(){
     document.getElementById("rtc-button-close").classList.toggle("visible");
     document.getElementById("rtc-mask").classList.toggle("visible");
     document.getElementById("rtc-button-open").classList.toggle("visible");
-    document.getElementById("bubble-message").classList.toggle("visible");
+    if(document.getElementById("bubble-message")) document.getElementById("bubble-message").classList.toggle("visible");
     document.body.classList.toggle("rtc-is-active");
 
     var ua = navigator.userAgent.toLowerCase();
