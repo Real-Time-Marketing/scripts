@@ -1,4 +1,3 @@
-//RTM-RTR script version 1.0.1
 var globalbID_;
 var RTRLIB = RTRLIB || (function(){
     var _args = {}; // private
@@ -37,15 +36,13 @@ function rtrTogglePane() {
 
     const element = document.querySelector("#rtr-button--close");
     const visible = element.classList.contains("visible");
- 
     if(visible == true){
-        //document.getElementById("iframe_review_list").contentWindow.reviews();
         fetch('https://dashboard.realtimemarketing.com/p/rtr/actions?action=increment-page-views&bID='+globalbID_,
             {
                 method: "POST",
             },
         ).then(function(response) {
-            console.log('rtr.pageviews++ logged');
+            console.log('rtr.pageviews++');
         });
     }
 }
