@@ -68,19 +68,19 @@ function getThreadID(thread_url){
         rtc_thread_id = arr.at(-1);
 
         if(rtc_thread_id !== '' && !rtc_saveDetails){
-            const url = 'http://ip-api.com/json'
+            const url = 'https://ipapi.co/json/'
             // const url = 'http://www.geoplugin.net/json.gp'
             fetch(url, { method: "GET", })
             .then(response => response.json())
             .then(data => {
-                const ip_address = data.query || ''
+                const ip_address = data.ip || ''
                 const url = window.location.href || ''
                 const timezone = data.timezone || ''
                 const os = getOS()
-                const country = data.country || ''
-                const region = data.regionName || ''
+                const country = data.country_name || ''
+                const region = data.region || ''
                 const city = data.city || ''
-                const zipcode = data.zip || ''
+                const zipcode = data.postal || ''
                 const local_time = new Date()
                 const browser = getBrowser()
                 const obj = {
