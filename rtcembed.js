@@ -2,7 +2,7 @@ var rtc_globalbID;
 var rtc_thread_id = '';
 var rtc_unread_count = 0;
 var rtc_saveDetails = false;
-var rtc_base_url = 'https://dashboard.realtimemarketing.com'
+var rtc_base_url = 'https://dashboard.realtimemarketing.com';
 var RTCLIB = RTCLIB || (function(){
     var _args = {}; // private
 
@@ -31,6 +31,14 @@ var RTCLIB = RTCLIB || (function(){
         },
     };
 }());
+
+window.addEventListener("message", function(event) {
+    const data = JSON.parse(event.data);
+    if(data.channel && data.channel == 'RTC_THREAD'){
+        getThreadID(data.thread_id);
+    }
+});
+
 (function() {
     setTimeout(function(){
         if(document.getElementById("bubble-message")) document.getElementById("bubble-message").classList.toggle("visible");
@@ -62,14 +70,12 @@ function rtcTimeout() {
     }, 5000);
 }
 
-function getThreadID(thread_url){
-    if(thread_url.href.indexOf('/chat/') !== -1){
-        let arr = thread_url.href.split("/");
-        rtc_thread_id = arr.at(-1);
+function getThreadID(thread_id){
+    if(thread_id && thread_id != '' && thread_id != null && typeof thread_id != undefined){
+        rtc_thread_id = thread_id;
 
-        if(rtc_thread_id !== '' && !rtc_saveDetails){
+        if(rtc_thread_id !== ''){
             const url = 'https://ipapi.co/json/'
-            // const url = 'http://www.geoplugin.net/json.gp'
             fetch(url, { method: "GET", })
             .then(response => response.json())
             .then(data => {
@@ -126,28 +132,11 @@ function  rtcTogglePane(){
     document.body.classList.toggle("rtc-is-active");
 
     var ua = navigator.userAgent.toLowerCase();
-
     if (ua.indexOf('safari') !== -1) {
-        //if safari
-        var time_start = document.getElementById("time_start_safari").value;
-        const utc_start = new Date(time_start + ' UTC');
-        let startHour = utc_start.getHours();
-        let startMinutes = utc_start.getMinutes();
-        let startSeconds = utc_start.getSeconds();
-        startHour = ("0" + startHour).slice(-2);
-        startMinutes = ("0" + startMinutes).slice(-2);
-        startSeconds = ("0" + startSeconds).slice(-2);
-        time_start = startHour + ":" + startMinutes + ":" + startSeconds;
-
-        var time_end = document.getElementById("time_end_safari").value;
-        const utc_end = new Date(time_end + ' UTC');
-        let endHour = utc_end.getHours();
-        let endMinutes = utc_end.getMinutes();
-        let endSeconds = utc_end.getSeconds();
-        endHour = ("0" + endHour).slice(-2);
-        endMinutes = ("0" + endMinutes).slice(-2);
-        endSeconds = ("0" + endSeconds).slice(-2);
-        time_end = endHour + ":" + endMinutes + ":" + endSeconds;
+        var time_start = document.getElementById("time_start_safari").value; // opening hour
+        var time_end = document.getElementById("time_end_safari").value; // closing hour
+        var destination_time = document.getElementById("converted_time").value; // CURRENT TIME IN SET TIMEZONE H:i:s - converted local time to timezone
+        console.log(time_start, time_end, destination_time)
     }else{
         var time_start = document.getElementById("time_start").value;
         time_start = time_start.replace(/-/g, "/");
@@ -162,9 +151,7 @@ function  rtcTogglePane(){
         time_end = utc_end.toLocaleTimeString('en-GB');
     }
 
-    let curr = new Date().toLocaleTimeString('en-GB');
     let is_active = document.getElementById("is_active").value;
-
     let _thread_id = document.getElementById("thread_id").value;
     if(_thread_id !== ''){
         rtc_thread_id = _thread_id
@@ -173,7 +160,7 @@ function  rtcTogglePane(){
     if (time_start == 'Invalid Date' || time_end == 'Invalid Date' || is_active == 0) {
         document.getElementById("rtc-unavailable").classList.toggle("visible");
     } else {
-        if (curr > time_start || curr < time_end) {
+        if (destination_time > time_start && destination_time < time_end) {
             document.getElementById("rtc-iframe").classList.toggle("visible");
         } else {
             document.getElementById("rtc-unavailable").classList.toggle("visible");
